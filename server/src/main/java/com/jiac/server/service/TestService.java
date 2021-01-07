@@ -1,6 +1,7 @@
 package com.jiac.server.service;
 
 import com.jiac.server.domain.Test;
+import com.jiac.server.domain.TestExample;
 import com.jiac.server.mapper.TestMapper;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,9 @@ public class TestService {
     private TestMapper testMapper;
 
     public List<Test> list(){
-        return null;
+        TestExample testExample = new TestExample();
+        testExample.createCriteria().andIdEqualTo("1");
+        testExample.setOrderByClause("id asc");
+        return testMapper.selectByExample(testExample);
     }
 }

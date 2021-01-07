@@ -1,5 +1,7 @@
 package com.jiac.system.controller;
 
+import com.jiac.server.domain.Test;
+import com.jiac.server.domain.TestExample;
 import com.jiac.server.service.TestService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
