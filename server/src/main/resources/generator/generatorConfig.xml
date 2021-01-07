@@ -4,6 +4,9 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <context id="DB2Tables" targetRuntime="MyBatis3">
+
+        <!-- 覆盖生成XML文件 -->
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"></plugin>
         <!-- 数据库链接地址账号密码-->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                         connectionURL="jdbc:mysql://localhost:3306/course?serverTimezone=UTC" userId="root"
