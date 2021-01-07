@@ -1,7 +1,13 @@
 package com.jiac.system.controller;
 
+import com.jiac.system.domain.Test;
+import com.jiac.system.service.TestService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * FileName: TestController
@@ -11,8 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
+    @Autowired
+    private TestService testService;
+
     @RequestMapping("/test")
-    public String test(){
-        return "success";
+    public List<Test> test(){
+        return testService.list();
     }
 }
