@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <!-- 数据库链接地址账号密码-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/course?serverTimezone=UTC" userId="root"
+                        password="password">
+        </jdbcConnection>
+        <!-- 生成DataObject类存放位置-->
+        <javaModelGenerator targetPackage="com.jiac.server.domain" targetProject="src/main/java">
+        </javaModelGenerator>
+        <!-- 生成映射文件存放位置-->
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
+        </sqlMapGenerator>
+        <!-- 生成Dao类存放位置-->
+        <!-- 客户端代码, 生成易于使用的针对Model对象和XML配置文件的代码
+            type="ANNOTATEDMAPPER" , 生成Java Model 和基于注解的Mapper对象
+            type="MIXEDMAPPER", 生成基于注解的Java Model和相应的Mapper对象
+            type="XMLMAPPER", 生成SQLMap XML文件和独立的Mapper接口
+        -->
+        <javaClientGenerator targetPackage="com.jiac.server.mapper" targetProject="src/main/java" type="XMLMAPPER">
+        </javaClientGenerator>
+
+        <!-- 生成对应表及类名-->
+        <table tableName="test" domainObjectName="Test"></table>
+    </context>
+</generatorConfiguration>
