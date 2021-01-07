@@ -1,4 +1,4 @@
-package com.jiac.system;
+package com.jiac.system.config;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
