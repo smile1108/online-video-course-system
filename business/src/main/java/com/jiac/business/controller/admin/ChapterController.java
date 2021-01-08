@@ -1,6 +1,7 @@
-package com.jiac.business.controller;
+package com.jiac.business.controller.admin;
 
 import com.jiac.server.domain.Chapter;
+import com.jiac.server.dto.ChapterDto;
 import com.jiac.server.service.ChapterService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,13 +15,14 @@ import java.util.List;
  * Date: 2021/1/6 16:21
  */
 @RestController
+@RequestMapping("/admin")
 public class ChapterController {
 
     @Resource
     private ChapterService chapterService;
 
     @RequestMapping("/chapter")
-    public List<Chapter> chapter(){
+    public List<ChapterDto> chapter(){
         return chapterService.list();
     }
 }
