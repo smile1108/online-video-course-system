@@ -2,7 +2,9 @@ package com.jiac.business.controller.admin;
 
 import com.jiac.server.domain.Chapter;
 import com.jiac.server.dto.ChapterDto;
+import com.jiac.server.dto.PageDto;
 import com.jiac.server.service.ChapterService;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +24,8 @@ public class ChapterController {
     private ChapterService chapterService;
 
     @RequestMapping("/list")
-    public List<ChapterDto> list(){
-        return chapterService.list();
+    public PageDto list(@RequestBody PageDto pageDto){
+        chapterService.list(pageDto);
+        return pageDto;
     }
 }
