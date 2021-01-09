@@ -7,6 +7,7 @@ import com.jiac.server.domain.ChapterExample;
 import com.jiac.server.dto.ChapterDto;
 import com.jiac.server.dto.PageDto;
 import com.jiac.server.mapper.ChapterMapper;
+import com.jiac.server.util.UuidUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -39,5 +40,12 @@ public class ChapterService {
             chapterDtoList.add(chapterDto);
         }
         pageDto.setList(chapterDtoList);
+    }
+
+    public void save(ChapterDto chapterDto){
+        chapterDto.setId(UuidUtil.getShortUuid());
+        Chapter chapter = new Chapter();
+        BeanUtils.copyProperties(chapter, chapterDto);
+        chapterMapper.insert(chapter);
     }
 }
