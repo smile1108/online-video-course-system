@@ -3,6 +3,7 @@ package com.jiac.business.controller.admin;
 import com.jiac.server.domain.Chapter;
 import com.jiac.server.dto.ChapterDto;
 import com.jiac.server.dto.PageDto;
+import com.jiac.server.dto.ResponseDto;
 import com.jiac.server.service.ChapterService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,14 +25,18 @@ public class ChapterController {
     private ChapterService chapterService;
 
     @RequestMapping("/list")
-    public PageDto list(@RequestBody PageDto pageDto){
+    public ResponseDto list(@RequestBody PageDto pageDto){
+        ResponseDto responseDto = new ResponseDto<>();
         chapterService.list(pageDto);
-        return pageDto;
+        responseDto.setContent(pageDto);
+        return responseDto;
     }
 
     @RequestMapping("/save")
-    public ChapterDto save(@RequestBody ChapterDto chapterDto){
+    public ResponseDto save(@RequestBody ChapterDto chapterDto){
+        ResponseDto responseDto = new ResponseDto<>();
         chapterService.save(chapterDto);
-        return chapterDto;
+        responseDto.setContent(chapterDto);
+        return responseDto;
     }
 }
