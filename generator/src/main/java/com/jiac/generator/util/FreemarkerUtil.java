@@ -1,4 +1,4 @@
-package com.jiac.generator.test.util;
+package com.jiac.generator.util;
 
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
