@@ -1,4 +1,4 @@
-package com.jiac.business.controller.admin;
+package com.jiac.${module}.controller.admin;
 
 import com.jiac.server.domain.${Domain};
 import com.jiac.server.dto.${Domain}Dto;
@@ -19,6 +19,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/${domain}")
 public class ${Domain}Controller {
+
+    public static final String BUSINESS_NAME = "${tableNameCn}";
 
     @Resource
     private ${Domain}Service ${domain}Service;

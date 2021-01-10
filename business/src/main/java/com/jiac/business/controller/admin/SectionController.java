@@ -20,6 +20,8 @@ import java.util.List;
 @RequestMapping("/admin/section")
 public class SectionController {
 
+    public static final String BUSINESS_NAME = "小节";
+
     @Resource
     private SectionService sectionService;
 
