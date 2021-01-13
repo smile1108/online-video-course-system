@@ -11,6 +11,7 @@ import com.jiac.server.util.CopyUtil;
 import com.jiac.server.util.UuidUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -27,6 +28,14 @@ public class CategoryService {
 
     @Resource
     private CategoryMapper categoryMapper;
+
+    public List<CategoryDto> all(){
+        CategoryExample categoryExample = new CategoryExample();
+        categoryExample.setOrderByClause("sort asc");
+        List<Category> categoryList = categoryMapper.selectByExample(categoryExample);
+        List<CategoryDto> categoryDtoList = CopyUtil.copyList(categoryList, CategoryDto.class);
+        return categoryDtoList;
+    }
 
     public void list(PageDto pageDto){
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
@@ -63,7 +72,19 @@ public class CategoryService {
         categoryMapper.updateByPrimaryKey(category);
     }
 
+    @Transactional
     public void delete(String id) {
+        deleteChildren(id);
         categoryMapper.deleteByPrimaryKey(id);
+    }
+
+    private void deleteChildren(String id) {
+        Category category = categoryMapper.selectByPrimaryKey(id);
+        if("00000000".equals(category.getParent())){
+            // 如果是一级分类 需要删除其下的二级分类
+            CategoryExample example = new CategoryExample();
+            example.createCriteria().andParentEqualTo(category.getParent());
+            categoryMapper.deleteByExample(example);
+        }
     }
 }
