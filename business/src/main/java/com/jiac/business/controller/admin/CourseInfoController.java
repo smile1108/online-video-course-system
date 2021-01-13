@@ -1,10 +1,7 @@
 package com.jiac.business.controller.admin;
 
 import com.jiac.server.domain.CourseInfo;
-import com.jiac.server.dto.CourseCategoryDto;
-import com.jiac.server.dto.CourseInfoDto;
-import com.jiac.server.dto.PageDto;
-import com.jiac.server.dto.ResponseDto;
+import com.jiac.server.dto.*;
 import com.jiac.server.service.CourseCategoryService;
 import com.jiac.server.service.CourseInfoService;
 import com.jiac.server.util.ValidatorUtil;
@@ -64,6 +61,21 @@ public class CourseInfoController {
         ResponseDto responseDto = new ResponseDto();
         List<CourseCategoryDto> dtoList = courseCategoryService.listByCourse(courseId);
         responseDto.setContent(dtoList);
+        return responseDto;
+    }
+
+    @GetMapping("/find-content/{id}")
+    public ResponseDto findContent(@PathVariable String id){
+        ResponseDto responseDto = new ResponseDto();
+        CourseContentDto contentDto = courseInfoService.findContent(id);
+        responseDto.setContent(contentDto);
+        return responseDto;
+    }
+
+    @PostMapping("/save-content")
+    public ResponseDto saveContent(@RequestBody CourseContentDto contentDto){
+        ResponseDto responseDto = new ResponseDto();
+        courseInfoService.saveContent(contentDto);
         return responseDto;
     }
 }

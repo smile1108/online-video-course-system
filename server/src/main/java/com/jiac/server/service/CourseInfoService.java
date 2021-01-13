@@ -2,10 +2,13 @@ package com.jiac.server.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jiac.server.domain.CourseContent;
 import com.jiac.server.domain.CourseInfo;
 import com.jiac.server.domain.CourseInfoExample;
+import com.jiac.server.dto.CourseContentDto;
 import com.jiac.server.dto.CourseInfoDto;
 import com.jiac.server.dto.PageDto;
+import com.jiac.server.mapper.CourseContentMapper;
 import com.jiac.server.mapper.CourseInfoMapper;
 import com.jiac.server.mapper.my.MyCourseMapper;
 import com.jiac.server.util.CopyUtil;
@@ -40,6 +43,9 @@ public class CourseInfoService {
 
     @Resource
     private CourseCategoryService courseCategoryService;
+
+    @Resource
+    private CourseContentMapper courseContentMapper;
 
     public void list(PageDto pageDto){
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
@@ -95,5 +101,30 @@ public class CourseInfoService {
     public void updateTime(String courseId){
         LOG.info("更新课程时长: {}", courseId);
         myCourseMapper.updateTime(courseId);
+    }
+
+    /**
+     * 查找课程内容
+     * @param id
+     * @return
+     */
+    public CourseContentDto findContent(String id){
+        CourseContent content = courseContentMapper.selectByPrimaryKey(id);
+        if(content == null){
+            return null;
+        }
+        return CopyUtil.copy(content, CourseContentDto.class);
+    }
+
+    /**
+     * 保存课程内容 包含新增和修改
+     */
+    public int saveContent(CourseContentDto contentDto){
+        CourseContent content = CopyUtil.copy(contentDto, CourseContent.class);
+        int i = courseContentMapper.updateByPrimaryKeyWithBLOBs(content);
+        if(i == 0){
+            i= courseContentMapper.insert(content);
+        }
+        return i;
     }
 }
