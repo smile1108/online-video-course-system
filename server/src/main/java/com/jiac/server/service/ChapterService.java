@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.jiac.server.domain.Chapter;
 import com.jiac.server.domain.ChapterExample;
 import com.jiac.server.dto.ChapterDto;
+import com.jiac.server.dto.ChapterPageDto;
 import com.jiac.server.dto.PageDto;
 import com.jiac.server.mapper.ChapterMapper;
 import com.jiac.server.util.CopyUtil;
@@ -28,12 +29,16 @@ public class ChapterService {
     @Resource
     private ChapterMapper chapterMapper;
 
-    public void list(PageDto pageDto){
-        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+    public void list(ChapterPageDto chapterPageDto){
+        PageHelper.startPage(chapterPageDto.getPage(), chapterPageDto.getSize());
         ChapterExample chapterExample = new ChapterExample();
+        ChapterExample.Criteria criteria = chapterExample.createCriteria();
+        if(!StringUtils.isEmpty(chapterPageDto.getCourseId())){
+            criteria.andCourseIdEqualTo(chapterPageDto.getCourseId());
+        }
         List<Chapter> chapterList = chapterMapper.selectByExample(chapterExample);
         PageInfo<Chapter> pageInfo = new PageInfo<>(chapterList);
-        pageDto.setTotal(pageInfo.getTotal());
+        chapterPageDto.setTotal(pageInfo.getTotal());
         List<ChapterDto> chapterDtoList = new ArrayList<>();
         for(int i = 0, l = chapterList.size(); i < l; i++){
             Chapter chapter = chapterList.get(i);
@@ -41,7 +46,7 @@ public class ChapterService {
             BeanUtils.copyProperties(chapter, chapterDto);
             chapterDtoList.add(chapterDto);
         }
-        pageDto.setList(chapterDtoList);
+        chapterPageDto.setList(chapterDtoList);
     }
 
     public void save(ChapterDto chapterDto){

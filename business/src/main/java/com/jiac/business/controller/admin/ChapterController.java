@@ -2,6 +2,7 @@ package com.jiac.business.controller.admin;
 
 import com.jiac.server.domain.Chapter;
 import com.jiac.server.dto.ChapterDto;
+import com.jiac.server.dto.ChapterPageDto;
 import com.jiac.server.dto.PageDto;
 import com.jiac.server.dto.ResponseDto;
 import com.jiac.server.service.ChapterService;
@@ -24,10 +25,11 @@ public class ChapterController {
     private ChapterService chapterService;
 
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto){
+    public ResponseDto list(@RequestBody ChapterPageDto chapterPageDto){
         ResponseDto responseDto = new ResponseDto<>();
-        chapterService.list(pageDto);
-        responseDto.setContent(pageDto);
+        ValidatorUtil.require(chapterPageDto.getCourseId(), "课程ID");
+        chapterService.list(chapterPageDto);
+        responseDto.setContent(chapterPageDto);
         return responseDto;
     }
 
