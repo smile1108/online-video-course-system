@@ -1,6 +1,5 @@
 package com.jiac.business.controller.admin;
 
-import com.jiac.server.domain.Teacher;
 import com.jiac.server.dto.TeacherDto;
 import com.jiac.server.dto.PageDto;
 import com.jiac.server.dto.ResponseDto;
@@ -24,6 +23,14 @@ public class TeacherController {
 
     @Resource
     private TeacherService teacherService;
+
+    @PostMapping("/all")
+    public ResponseDto all(){
+        ResponseDto responseDto = new ResponseDto<>();
+        List<TeacherDto> teacherDtoList = teacherService.all();
+        responseDto.setContent(teacherDtoList);
+        return responseDto;
+    }
 
     @PostMapping("/list")
     public ResponseDto list(@RequestBody PageDto pageDto){

@@ -59,6 +59,9 @@ create table `course_info` (
     primary key (id)
 )engine=InnoDB default charset=utf8mb4 comment='课程表';
 
+-- 修改课程的字段 增加讲师字段
+alter table `course_info` add column (`teacher_id` char(8) comment '讲师|teacher.id');
+
 insert into course_info (id, name, summary, time, price, image, level, charge, status, enroll, sort, created_at, updated_at)
 values ('00000001', '测试课程01', '这是一门测试课程', 7200, 19.9, '', 0, 'C', 'D', 100, 0, now(), now());
 

@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.jiac.server.domain.Teacher;
 import com.jiac.server.domain.TeacherExample;
 import com.jiac.server.dto.TeacherDto;
+import com.jiac.server.dto.TeacherDto;
 import com.jiac.server.dto.PageDto;
 import com.jiac.server.mapper.TeacherMapper;
 import com.jiac.server.util.CopyUtil;
@@ -27,6 +28,13 @@ public class TeacherService {
 
     @Resource
     private TeacherMapper teacherMapper;
+
+    public List<TeacherDto> all(){
+        TeacherExample teacherExample = new TeacherExample();
+        List<Teacher> teacherList = teacherMapper.selectByExample(teacherExample);
+        List<TeacherDto> teacherDtoList = CopyUtil.copyList(teacherList, TeacherDto.class);
+        return teacherDtoList;
+    }
 
     public void list(PageDto pageDto){
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
