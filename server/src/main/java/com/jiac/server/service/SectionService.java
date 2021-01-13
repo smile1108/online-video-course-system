@@ -12,6 +12,7 @@ import com.jiac.server.util.CopyUtil;
 import com.jiac.server.util.UuidUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -57,6 +58,7 @@ public class SectionService {
         sectionPageDto.setList(sectionDtoList);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void save(SectionDto sectionDto){
         Section section = CopyUtil.copy(sectionDto, Section.class);
         if(StringUtils.isEmpty(sectionDto.getId())){
