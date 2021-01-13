@@ -1,9 +1,11 @@
 package com.jiac.business.controller.admin;
 
 import com.jiac.server.domain.CourseInfo;
+import com.jiac.server.dto.CourseCategoryDto;
 import com.jiac.server.dto.CourseInfoDto;
 import com.jiac.server.dto.PageDto;
 import com.jiac.server.dto.ResponseDto;
+import com.jiac.server.service.CourseCategoryService;
 import com.jiac.server.service.CourseInfoService;
 import com.jiac.server.util.ValidatorUtil;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,9 @@ public class CourseInfoController {
 
     @Resource
     private CourseInfoService courseInfoService;
+
+    @Resource
+    private CourseCategoryService courseCategoryService;
 
     @PostMapping("/list")
     public ResponseDto list(@RequestBody PageDto pageDto){
@@ -51,6 +56,14 @@ public class CourseInfoController {
     public ResponseDto delete(@PathVariable String id){
         ResponseDto responseDto = new ResponseDto<>();
         courseInfoService.delete(id);
+        return responseDto;
+    }
+
+    @PostMapping("/list-category/{courseId}")
+    public ResponseDto listCategory(@PathVariable(value = "courseId") String courseId){
+        ResponseDto responseDto = new ResponseDto();
+        List<CourseCategoryDto> dtoList = courseCategoryService.listByCourse(courseId);
+        responseDto.setContent(dtoList);
         return responseDto;
     }
 }

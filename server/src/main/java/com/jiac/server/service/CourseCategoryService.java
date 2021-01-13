@@ -12,6 +12,7 @@ import com.jiac.server.util.CopyUtil;
 import com.jiac.server.util.UuidUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -67,6 +68,7 @@ public class CourseCategoryService {
         courseCategoryMapper.deleteByPrimaryKey(id);
     }
 
+    @Transactional
     public void saveBatch(String courseId, List<CategoryDto> dtoList){
         CourseCategoryExample example = new CourseCategoryExample();
         example.createCriteria().andCourseIdEqualTo(courseId);
@@ -79,5 +81,12 @@ public class CourseCategoryService {
             courseCategory.setCategoryId(categoryDto.getId());
             insert(courseCategory);
         }
+    }
+
+    public List<CourseCategoryDto> listByCourse(String courseId){
+        CourseCategoryExample example = new CourseCategoryExample();
+        example.createCriteria().andCourseIdEqualTo(courseId);
+        List<CourseCategory> courseCategoryList = courseCategoryMapper.selectByExample(example);
+        return CopyUtil.copyList(courseCategoryList, CourseCategoryDto.class);
     }
 }
