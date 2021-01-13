@@ -4,6 +4,7 @@ import com.jiac.server.domain.Section;
 import com.jiac.server.dto.SectionDto;
 import com.jiac.server.dto.PageDto;
 import com.jiac.server.dto.ResponseDto;
+import com.jiac.server.dto.SectionPageDto;
 import com.jiac.server.service.SectionService;
 import com.jiac.server.util.ValidatorUtil;
 import org.springframework.web.bind.annotation.*;
@@ -26,10 +27,12 @@ public class SectionController {
     private SectionService sectionService;
 
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto){
+    public ResponseDto list(@RequestBody SectionPageDto sectionPageDto){
         ResponseDto responseDto = new ResponseDto<>();
-        sectionService.list(pageDto);
-        responseDto.setContent(pageDto);
+        ValidatorUtil.require(sectionPageDto.getCourseId(), "课程ID");
+        ValidatorUtil.require(sectionPageDto.getChapterId(), "大章ID");
+        sectionService.list(sectionPageDto);
+        responseDto.setContent(sectionPageDto);
         return responseDto;
     }
 
