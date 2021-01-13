@@ -6,4 +6,20 @@
         update course_info c set `time` = (select sum(`time`) from `section` where course_id = #{courseId})
         where c.id = #{courseId}
     </update>
+
+    <update id="updateSort" parameterType="com.jiac.server.dto.SortDto">
+        update course_info set `sort` = #{newSort} where id = #{id}
+    </update>
+
+    <update id="moveSortsBackward" parameterType="com.jiac.server.dto.SortDto">
+        <![CDATA[
+        update course_info set `sort` = (`sort` + 1) where `sort` >= #{newSort} and `sort` <= #{oldSort}
+        ]]>
+    </update>
+
+    <update id="moveSortsForward" parameterType="com.jiac.server.dto.SortDto">
+        <![CDATA[
+        update course_info set `sort` = (`sort` - 1) where `sort` <= #{newSort} and `sort` >= #{oldSort}
+        ]]>
+    </update>
 </mapper>

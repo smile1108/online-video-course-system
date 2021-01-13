@@ -8,6 +8,7 @@ import com.jiac.server.domain.CourseInfoExample;
 import com.jiac.server.dto.CourseContentDto;
 import com.jiac.server.dto.CourseInfoDto;
 import com.jiac.server.dto.PageDto;
+import com.jiac.server.dto.SortDto;
 import com.jiac.server.mapper.CourseContentMapper;
 import com.jiac.server.mapper.CourseInfoMapper;
 import com.jiac.server.mapper.my.MyCourseMapper;
@@ -74,7 +75,7 @@ public class CourseInfoService {
         }
 
         // 批量保存课程分类
-        courseCategoryService.saveBatch(courseInfoDto.getId(), courseInfoDto.getCategorys());
+        courseCategoryService.saveBatch(courseInfo.getId(), courseInfoDto.getCategorys());
     }
 
     private void insert(CourseInfo courseInfo){
@@ -126,5 +127,25 @@ public class CourseInfoService {
             i= courseContentMapper.insert(content);
         }
         return i;
+    }
+
+    /**
+     * 排序
+     * @param sortDto
+     */
+    @Transactional
+    public void sort(SortDto sortDto){
+        // 修改当前记录的排序值
+        myCourseMapper.updateSort(sortDto);
+
+        // 如果排序值变大
+        if(sortDto.getNewSort() > sortDto.getOldSort()){
+            myCourseMapper.moveSortsForward(sortDto);
+        }
+
+        // 如果排序值变小
+        if(sortDto.getNewSort() < sortDto.getOldSort()){
+            myCourseMapper.moveSortsBackward(sortDto);
+        }
     }
 }

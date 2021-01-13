@@ -78,4 +78,11 @@ public class CourseInfoController {
         courseInfoService.saveContent(contentDto);
         return responseDto;
     }
+
+    @RequestMapping(value = "/sort")
+    public ResponseDto sort(@RequestBody SortDto sortDto){
+        ResponseDto responseDto = new ResponseDto();
+        courseInfoService.sort(sortDto);
+        return responseDto;
+    }
 }
