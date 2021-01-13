@@ -7,8 +7,11 @@ import com.jiac.server.domain.CourseInfoExample;
 import com.jiac.server.dto.CourseInfoDto;
 import com.jiac.server.dto.PageDto;
 import com.jiac.server.mapper.CourseInfoMapper;
+import com.jiac.server.mapper.my.MyCourseMapper;
 import com.jiac.server.util.CopyUtil;
 import com.jiac.server.util.UuidUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -26,8 +29,13 @@ import java.util.Date;
 @Service
 public class CourseInfoService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(CourseInfoService.class);
+
     @Resource
     private CourseInfoMapper courseInfoMapper;
+
+    @Resource
+    private MyCourseMapper myCourseMapper;
 
     public void list(PageDto pageDto){
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
@@ -70,5 +78,14 @@ public class CourseInfoService {
 
     public void delete(String id) {
         courseInfoMapper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * 更新课程时长
+     * @param courseId
+     */
+    public void updateTime(String courseId){
+        LOG.info("更新课程时长: {}", courseId);
+        myCourseMapper.updateTime(courseId);
     }
 }

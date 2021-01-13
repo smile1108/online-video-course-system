@@ -61,3 +61,6 @@ create table `course_info` (
 
 insert into course_info (id, name, summary, time, price, image, level, charge, status, enroll, sort, created_at, updated_at)
 values ('00000001', '测试课程01', '这是一门测试课程', 7200, 19.9, '', 0, 'C', 'D', 100, 0, now(), now());
+
+update course_info c set `time` = (select sum(`time`) from `section` where course_id = '00000001')
+    where c.id = '00000001';
