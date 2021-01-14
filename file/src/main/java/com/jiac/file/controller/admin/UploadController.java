@@ -22,14 +22,13 @@ import java.util.List;
  * Author: Jiac
  * Date: 2021/1/6 16:21
  */
-@RestController("/admin")
+@RestController
+@RequestMapping("/admin")
 public class UploadController {
 
     private static final Logger LOG = LoggerFactory.getLogger(UploadController.class);
 
-
-
-    @PostMapping("/upload")
+    @RequestMapping("/upload")
     public ResponseDto upload(@RequestParam MultipartFile file) throws IOException {
         LOG.info("上传文件开始：{}", file);
         LOG.info(file.getOriginalFilename());
