@@ -5,6 +5,11 @@
 <generatorConfiguration>
     <context id="DB2Tables" targetRuntime="MyBatis3">
 
+        <!--    自动检测关键字    -->
+        <property name="autoDelimitKeywords" value="true"/>
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
         <!-- 覆盖生成XML文件 -->
         <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"></plugin>
         <!-- 数据库链接地址账号密码-->
@@ -28,13 +33,14 @@
         </javaClientGenerator>
 
         <!-- 生成对应表及类名-->
-<!--        <table tableName="test" domainObjectName="Test"></table>-->
-<!--        <table tableName="chapter" domainObjectName="Chapter"></table>-->
-<!--        <table tableName="section" domainObjectName="Section"></table>-->
-        <table tableName="course_info" domainObjectName="CourseInfo"></table>
-<!--        <table tableName="category" domainObjectName="Category"></table>-->
-<!--        <table tableName="course_category" domainObjectName="CourseCategory"></table>-->
-<!--        <table tableName="course_content" domainObjectName="CourseContent"></table>-->
-<!--        <table tableName="teacher" domainObjectName="Teacher"></table>-->
+        <!--        <table tableName="test" domainObjectName="Test"></table>-->
+        <!--        <table tableName="chapter" domainObjectName="Chapter"></table>-->
+        <!--        <table tableName="section" domainObjectName="Section"></table>-->
+        <!--        <table tableName="course_info" domainObjectName="CourseInfo"></table>-->
+        <!--        <table tableName="category" domainObjectName="Category"></table>-->
+        <!--        <table tableName="course_category" domainObjectName="CourseCategory"></table>-->
+        <!--        <table tableName="course_content" domainObjectName="CourseContent"></table>-->
+        <!--        <table tableName="teacher" domainObjectName="Teacher"></table>-->
+        <table tableName="file" domainObjectName="File"></table>
     </context>
 </generatorConfiguration>
