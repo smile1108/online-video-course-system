@@ -77,8 +77,9 @@ public class UploadController {
         fileService.save(fileDto);
 
         ResponseDto responseDto = new ResponseDto();
+        fileDto.setPath(FILE_DOMAIN + path);
         // 返回给前端 上传的头像在服务器本地的路径
-        responseDto.setContent(FILE_DOMAIN + path);
+        responseDto.setContent(fileDto);
         return responseDto;
     }
 }
