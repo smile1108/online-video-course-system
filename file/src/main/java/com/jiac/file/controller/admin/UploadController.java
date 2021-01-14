@@ -43,6 +43,8 @@ public class UploadController {
         LOG.info(dest.getAbsolutePath());
 
         ResponseDto responseDto = new ResponseDto();
+        // 返回给前端 上传的头像在服务器本地的路径
+        responseDto.setContent("http://localhost:9000/file/f/" + key + "-" + fileName);
         return responseDto;
     }
 }
