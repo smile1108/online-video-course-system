@@ -51,11 +51,11 @@ public class UploadController {
                               Integer size,
                               Integer shardIndex,
                               Integer shardSize,
-                              Integer shardTotal) throws IOException {
+                              Integer shardTotal,
+                              String key) throws IOException {
 
         // 保存文件到本地
         FileUseEnum useEnum = FileUseEnum.getByCode(use);
-        String key = UuidUtil.getShortUuid();
 
         // 如果文件夹不存在则创建
         String dir = useEnum.name().toLowerCase();
