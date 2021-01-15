@@ -11,6 +11,7 @@ import com.jiac.server.util.CopyUtil;
 import com.jiac.server.util.UuidUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -47,10 +48,14 @@ public class FileService {
 
     public void save(FileDto fileDto){
         File file = CopyUtil.copy(fileDto, File.class);
-        if(StringUtils.isEmpty(fileDto.getId())){
+        File fileDb = selectByKey(fileDto.getKey());
+        if(fileDb == null){
+            // 如果根据key查不到对应的记录 说明这个文件还没有传输过分片 所以使用insert插入
             this.insert(file);
         } else {
-            this.update(file);
+            // 否则 如果根据key查到对应的记录 表示这个文件已经传输过分片 所以使用update更新记录
+            fileDb.setShardIndex(fileDto.getShardIndex());
+            this.update(fileDb);
         }
     }
 
@@ -69,5 +74,16 @@ public class FileService {
 
     public void delete(String id) {
         fileMapper.deleteByPrimaryKey(id);
+    }
+
+    public File selectByKey(String key) {
+        FileExample example = new FileExample();
+        example.createCriteria().andKeyEqualTo(key);
+        List<File> fileList = fileMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(fileList)){
+            return null;
+        } else {
+            return fileList.get(0);
+        }
     }
 }
