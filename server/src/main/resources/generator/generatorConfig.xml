@@ -41,7 +41,7 @@
         <!--        <table tableName="course_category" domainObjectName="CourseCategory"></table>-->
         <!--        <table tableName="course_content" domainObjectName="CourseContent"></table>-->
         <!--        <table tableName="teacher" domainObjectName="Teacher"></table>-->
-<!--        <table tableName="file" domainObjectName="File"></table>-->
-        <table tableName="course_content_file" domainObjectName="CourseContentFile"></table>
+                <table tableName="file" domainObjectName="File"></table>
+<!--        <table tableName="course_content_file" domainObjectName="CourseContentFile"></table>-->
     </context>
 </generatorConfiguration>
