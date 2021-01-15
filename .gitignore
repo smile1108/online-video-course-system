@@ -34,3 +34,6 @@ build/
 
 # log
 logs/
+
+course/
+teacher/
