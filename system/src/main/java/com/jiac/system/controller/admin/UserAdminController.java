@@ -55,4 +55,19 @@ public class UserAdminController {
         userAdminService.delete(id);
         return responseDto;
     }
+
+    /**
+     * 重置密码
+     * @param userAdminDto
+     * @return
+     */
+    @PostMapping("/save-password")
+    public ResponseDto savePassword(@RequestBody UserAdminDto userAdminDto){
+        userAdminDto.setPassword(DigestUtils.md5DigestAsHex(userAdminDto.getPassword().getBytes()));
+
+        ResponseDto responseDto = new ResponseDto<>();
+        userAdminService.savePassword(userAdminDto);
+        responseDto.setContent(userAdminDto);
+        return responseDto;
+    }
 }

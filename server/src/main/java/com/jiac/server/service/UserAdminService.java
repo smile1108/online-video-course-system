@@ -66,7 +66,8 @@ public class UserAdminService {
     }
 
     private void update(UserAdmin userAdmin){
-        userAdminMapper.updateByPrimaryKey(userAdmin);
+        userAdmin.setPassword(null);
+        userAdminMapper.updateByPrimaryKeySelective(userAdmin);
     }
 
     public void delete(String id) {
@@ -82,5 +83,16 @@ public class UserAdminService {
         } else {
             return userList.get(0);
         }
+    }
+
+    /**
+     * 重置密码
+     * @param userAdminDto
+     */
+    public void savePassword(UserAdminDto userAdminDto){
+        UserAdmin userAdmin = new UserAdmin();
+        userAdmin.setId(userAdminDto.getId());
+        userAdmin.setPassword(userAdminDto.getPassword());
+        userAdminMapper.updateByPrimaryKeySelective(userAdmin);
     }
 }
