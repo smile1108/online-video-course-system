@@ -6,11 +6,14 @@ import com.jiac.server.domain.UserAdmin;
 import com.jiac.server.domain.UserAdminExample;
 import com.jiac.server.dto.UserAdminDto;
 import com.jiac.server.dto.PageDto;
+import com.jiac.server.exception.BusinessException;
+import com.jiac.server.exception.BusinessExceptionCode;
 import com.jiac.server.mapper.UserAdminMapper;
 import com.jiac.server.util.CopyUtil;
 import com.jiac.server.util.UuidUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -55,6 +58,10 @@ public class UserAdminService {
 
     private void insert(UserAdmin userAdmin){
         userAdmin.setId(UuidUtil.getShortUuid());
+        UserAdmin userDb = this.selectByLoginName(userAdmin.getLoginName());
+        if(userDb != null){
+            throw new BusinessException(BusinessExceptionCode.USER_LOGIN_NAME_EXIST);
+        }
         userAdminMapper.insert(userAdmin);
     }
 
@@ -64,5 +71,16 @@ public class UserAdminService {
 
     public void delete(String id) {
         userAdminMapper.deleteByPrimaryKey(id);
+    }
+
+    public UserAdmin selectByLoginName(String loginName){
+        UserAdminExample userAdminExample = new UserAdminExample();
+        userAdminExample.createCriteria().andLoginNameEqualTo(loginName);
+        List<UserAdmin> userList = userAdminMapper.selectByExample(userAdminExample);
+        if(CollectionUtils.isEmpty(userList)){
+            return null;
+        } else {
+            return userList.get(0);
+        }
     }
 }
