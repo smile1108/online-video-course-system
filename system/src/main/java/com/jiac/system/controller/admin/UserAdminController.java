@@ -6,6 +6,7 @@ import com.jiac.server.dto.PageDto;
 import com.jiac.server.dto.ResponseDto;
 import com.jiac.server.service.UserAdminService;
 import com.jiac.server.util.ValidatorUtil;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -35,6 +36,7 @@ public class UserAdminController {
 
     @PostMapping("/save")
     public ResponseDto save(@RequestBody UserAdminDto userAdminDto){
+        userAdminDto.setPassword(DigestUtils.md5DigestAsHex(userAdminDto.getPassword().getBytes()));
         // 保存校验
         ValidatorUtil.require(userAdminDto.getLoginName(), "登录名");
         ValidatorUtil.length(userAdminDto.getLoginName(), "登录名", 1, 50);
