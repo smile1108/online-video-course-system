@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.jiac.server.domain.UserAdmin;
 import com.jiac.server.domain.UserAdminExample;
+import com.jiac.server.dto.LoginUserAdminDto;
 import com.jiac.server.dto.UserAdminDto;
 import com.jiac.server.dto.PageDto;
 import com.jiac.server.exception.BusinessException;
@@ -11,6 +12,8 @@ import com.jiac.server.exception.BusinessExceptionCode;
 import com.jiac.server.mapper.UserAdminMapper;
 import com.jiac.server.util.CopyUtil;
 import com.jiac.server.util.UuidUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -27,6 +30,8 @@ import java.util.List;
  */
 @Service
 public class UserAdminService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(UserAdminService.class);
 
     @Resource
     private UserAdminMapper userAdminMapper;
@@ -94,5 +99,27 @@ public class UserAdminService {
         userAdmin.setId(userAdminDto.getId());
         userAdmin.setPassword(userAdminDto.getPassword());
         userAdminMapper.updateByPrimaryKeySelective(userAdmin);
+    }
+
+    /**
+     * 登录
+     * @param userAdminDto
+     */
+    public LoginUserAdminDto login(UserAdminDto userAdminDto){
+        UserAdmin userAdmin = selectByLoginName(userAdminDto.getLoginName());
+        if(userAdmin == null) {
+            // 用户名不存在
+            LOG.info("用户名不存在");
+            throw new BusinessException(BusinessExceptionCode.LOGIN_ERROR);
+        } else {
+            if(userAdmin.getPassword().equals(userAdminDto.getPassword())) {
+                // 登录成功
+                return CopyUtil.copy(userAdmin, LoginUserAdminDto.class);
+            } else {
+                // 密码不正确
+                LOG.info("密码不正确, 输入密码：{}， 数据库密码：{}", userAdminDto.getPassword(), userAdmin.getPassword());
+                throw new BusinessException(BusinessExceptionCode.LOGIN_ERROR);
+            }
+        }
     }
 }

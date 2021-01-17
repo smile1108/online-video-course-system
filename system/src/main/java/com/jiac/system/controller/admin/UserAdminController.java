@@ -1,6 +1,7 @@
 package com.jiac.system.controller.admin;
 
 import com.jiac.server.domain.UserAdmin;
+import com.jiac.server.dto.LoginUserAdminDto;
 import com.jiac.server.dto.UserAdminDto;
 import com.jiac.server.dto.PageDto;
 import com.jiac.server.dto.ResponseDto;
@@ -68,6 +69,21 @@ public class UserAdminController {
         ResponseDto responseDto = new ResponseDto<>();
         userAdminService.savePassword(userAdminDto);
         responseDto.setContent(userAdminDto);
+        return responseDto;
+    }
+
+    /**
+     * 登录
+     * @param userAdminDto
+     * @return
+     */
+    @PostMapping("/login")
+    public ResponseDto login(@RequestBody UserAdminDto userAdminDto){
+        userAdminDto.setPassword(DigestUtils.md5DigestAsHex(userAdminDto.getPassword().getBytes()));
+
+        ResponseDto responseDto = new ResponseDto<>();
+        LoginUserAdminDto loginUserAdminDto = userAdminService.login(userAdminDto);
+        responseDto.setContent(loginUserAdminDto);
         return responseDto;
     }
 }
