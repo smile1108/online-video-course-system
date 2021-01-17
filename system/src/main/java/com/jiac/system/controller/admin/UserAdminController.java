@@ -1,16 +1,14 @@
 package com.jiac.system.controller.admin;
 
 import com.jiac.server.domain.UserAdmin;
-import com.jiac.server.dto.LoginUserAdminDto;
-import com.jiac.server.dto.UserAdminDto;
-import com.jiac.server.dto.PageDto;
-import com.jiac.server.dto.ResponseDto;
+import com.jiac.server.dto.*;
 import com.jiac.server.service.UserAdminService;
 import com.jiac.server.util.ValidatorUtil;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -74,16 +72,25 @@ public class UserAdminController {
 
     /**
      * 登录
-     * @param userAdminDto
-     * @return
      */
     @PostMapping("/login")
-    public ResponseDto login(@RequestBody UserAdminDto userAdminDto){
+    public ResponseDto login(@RequestBody UserAdminDto userAdminDto, HttpServletRequest request){
         userAdminDto.setPassword(DigestUtils.md5DigestAsHex(userAdminDto.getPassword().getBytes()));
 
         ResponseDto responseDto = new ResponseDto<>();
         LoginUserAdminDto loginUserAdminDto = userAdminService.login(userAdminDto);
+        request.getSession().setAttribute(Constants.LOGIN_USER, loginUserAdminDto);
         responseDto.setContent(loginUserAdminDto);
+        return responseDto;
+    }
+
+    /**
+     * 退出登录
+     */
+    @PostMapping("/logout")
+    public ResponseDto logout(HttpServletRequest request){
+        ResponseDto responseDto = new ResponseDto<>();
+        request.getSession().removeAttribute(Constants.LOGIN_USER);
         return responseDto;
     }
 }
