@@ -3,6 +3,7 @@ package com.jiac.system.controller.admin;
 import com.jiac.server.domain.UserAdmin;
 import com.jiac.server.dto.*;
 import com.jiac.server.service.UserAdminService;
+import com.jiac.server.util.UuidUtil;
 import com.jiac.server.util.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * FileName: UserAdminController
@@ -106,10 +108,14 @@ public class UserAdminController {
             return responseDto;
         } else {
             // 验证通过后，移除验证码
-            request.getSession().removeAttribute(userAdminDto.getImageCodeToken());
+//            request.getSession().removeAttribute(userAdminDto.getImageCodeToken());
+            redisTemplate.delete(userAdminDto.getImageCodeToken());
         }
         LoginUserAdminDto loginUserAdminDto = userAdminService.login(userAdminDto);
-        request.getSession().setAttribute(Constants.LOGIN_USER, loginUserAdminDto);
+        String token = UuidUtil.getShortUuid();
+        loginUserAdminDto.setToken(token);
+        redisTemplate.opsForValue().set(token, loginUserAdminDto.toString(), 3600, TimeUnit.SECONDS);
+//        request.getSession().setAttribute(Constants.LOGIN_USER, loginUserAdminDto);
         responseDto.setContent(loginUserAdminDto);
         return responseDto;
     }
@@ -117,10 +123,11 @@ public class UserAdminController {
     /**
      * 退出登录
      */
-    @PostMapping("/logout")
-    public ResponseDto logout(HttpServletRequest request){
+    @PostMapping("/logout/{token}")
+    public ResponseDto logout(@PathVariable String token){
         ResponseDto responseDto = new ResponseDto<>();
-        request.getSession().removeAttribute(Constants.LOGIN_USER);
+        redisTemplate.delete(token);
+        LOG.info("从redis中删除token：{}", token);
         return responseDto;
     }
 }
