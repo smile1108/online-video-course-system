@@ -9,6 +9,7 @@ import com.jiac.server.dto.CourseContentDto;
 import com.jiac.server.dto.CourseInfoDto;
 import com.jiac.server.dto.PageDto;
 import com.jiac.server.dto.SortDto;
+import com.jiac.server.enums.CourseStatusEnum;
 import com.jiac.server.mapper.CourseContentMapper;
 import com.jiac.server.mapper.CourseInfoMapper;
 import com.jiac.server.mapper.my.MyCourseMapper;
@@ -147,5 +148,19 @@ public class CourseInfoService {
         if(sortDto.getNewSort() < sortDto.getOldSort()){
             myCourseMapper.moveSortsBackward(sortDto);
         }
+    }
+
+    /**
+     * 新课列表查询，只查询已发布的，按创建日期倒序
+     * @param pageDto
+     * @return
+     */
+    public List<CourseInfoDto> listNew(PageDto pageDto) {
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        CourseInfoExample courseInfoExample = new CourseInfoExample();
+        courseInfoExample.createCriteria().andStatusEqualTo(CourseStatusEnum.PUBLISH.getCode());
+        courseInfoExample.setOrderByClause("created_at desc");
+        List<CourseInfo> courseList = courseInfoMapper.selectByExample(courseInfoExample);
+        return CopyUtil.copyList(courseList, CourseInfoDto.class);
     }
 }
