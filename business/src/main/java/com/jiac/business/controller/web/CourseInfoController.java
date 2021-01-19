@@ -1,8 +1,10 @@
 package com.jiac.business.controller.web;
 
 import com.jiac.server.dto.CourseInfoDto;
+import com.jiac.server.dto.CoursePageDto;
 import com.jiac.server.dto.PageDto;
 import com.jiac.server.dto.ResponseDto;
+import com.jiac.server.enums.CourseStatusEnum;
 import com.jiac.server.service.CourseInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,8 +47,9 @@ public class CourseInfoController {
      * 列表查询
      */
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
+    public ResponseDto list(@RequestBody CoursePageDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
+        pageDto.setStatus(CourseStatusEnum.PUBLISH.getCode());
         courseInfoService.list(pageDto);
         responseDto.setContent(pageDto);
         return responseDto;

@@ -5,10 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.jiac.server.domain.CourseContent;
 import com.jiac.server.domain.CourseInfo;
 import com.jiac.server.domain.CourseInfoExample;
-import com.jiac.server.dto.CourseContentDto;
-import com.jiac.server.dto.CourseInfoDto;
-import com.jiac.server.dto.PageDto;
-import com.jiac.server.dto.SortDto;
+import com.jiac.server.dto.*;
 import com.jiac.server.enums.CourseStatusEnum;
 import com.jiac.server.mapper.CourseContentMapper;
 import com.jiac.server.mapper.CourseInfoMapper;
@@ -49,9 +46,13 @@ public class CourseInfoService {
     @Resource
     private CourseContentMapper courseContentMapper;
 
-    public void list(PageDto pageDto){
+    public void list(CoursePageDto pageDto){
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         CourseInfoExample courseInfoExample = new CourseInfoExample();
+        CourseInfoExample.Criteria criteria = courseInfoExample.createCriteria();
+        if(!StringUtils.isEmpty(pageDto.getStatus())) {
+            criteria.andStatusEqualTo(pageDto.getStatus());
+        }
         courseInfoExample.setOrderByClause("sort asc");
         List<CourseInfo> courseInfoList = courseInfoMapper.selectByExample(courseInfoExample);
         PageInfo<CourseInfo> pageInfo = new PageInfo<>(courseInfoList);

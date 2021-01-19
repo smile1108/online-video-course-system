@@ -28,7 +28,7 @@ public class CourseInfoController {
     private CourseCategoryService courseCategoryService;
 
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto){
+    public ResponseDto list(@RequestBody CoursePageDto pageDto){
         ResponseDto responseDto = new ResponseDto<>();
         courseInfoService.list(pageDto);
         responseDto.setContent(pageDto);
