@@ -19,7 +19,7 @@ import java.util.*;
  */
 public class ServerGenerator {
 
-    static String MODULE = "system";
+    static String MODULE = "business";
 
     static String toServicePath =
             "server\\src\\main\\java\\com\\jiac\\server\\service\\";
