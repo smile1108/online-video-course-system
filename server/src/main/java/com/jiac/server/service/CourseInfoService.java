@@ -44,6 +44,15 @@ public class CourseInfoService {
     private CourseCategoryService courseCategoryService;
 
     @Resource
+    private TeacherService teacherService;
+
+    @Resource
+    private ChapterService chapterService;
+
+    @Resource
+    private SectionService sectionService;
+
+    @Resource
     private CourseContentMapper courseContentMapper;
 
     public void list(CoursePageDto pageDto){
@@ -150,5 +159,33 @@ public class CourseInfoService {
         courseInfoExample.setOrderByClause("created_at desc");
         List<CourseInfo> courseList = courseInfoMapper.selectByExample(courseInfoExample);
         return CopyUtil.copyList(courseList, CourseInfoDto.class);
+    }
+
+    public CourseInfoDto findCourse(String id) {
+        CourseInfo courseInfo = courseInfoMapper.selectByPrimaryKey(id);
+        if(courseInfo == null || !CourseStatusEnum.PUBLISH.getCode().equals(courseInfo.getStatus())) {
+            return null;
+        }
+        CourseInfoDto courseInfoDto = CopyUtil.copy(courseInfo, CourseInfoDto.class);
+
+        // 查询内容
+        CourseContent content = courseContentMapper.selectByPrimaryKey(id);
+        if(content != null){
+            courseInfoDto.setContent(content.getContent());
+        }
+
+        // 查找讲师信息
+        TeacherDto teacherDto = teacherService.findById(courseInfoDto.getTeacherId());
+        courseInfoDto.setTeacher(teacherDto);
+
+        // 查找章信息
+        List<ChapterDto> chapterDtoList = chapterService.listByCourse(id);
+        courseInfoDto.setChapters(chapterDtoList);
+
+        // 查找节信息
+        List<SectionDto> sectionDtoList = sectionService.listByCourse(id);
+        courseInfoDto.setSections(sectionDtoList);
+
+        return courseInfoDto;
     }
 }

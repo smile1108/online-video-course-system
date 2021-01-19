@@ -85,4 +85,12 @@ public class SectionService {
     public void delete(String id) {
         sectionMapper.deleteByPrimaryKey(id);
     }
+
+    public List<SectionDto> listByCourse(String courseId) {
+        SectionExample example = new SectionExample();
+        example.createCriteria().andCourseIdEqualTo(courseId);
+        List<Section> sectionList = sectionMapper.selectByExample(example);
+        List<SectionDto> sectionDtoList = CopyUtil.copyList(sectionList, SectionDto.class);
+        return sectionDtoList;
+    }
 }
