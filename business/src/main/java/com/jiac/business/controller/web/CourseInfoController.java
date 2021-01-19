@@ -6,9 +6,7 @@ import com.jiac.server.dto.ResponseDto;
 import com.jiac.server.service.CourseInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -40,6 +38,17 @@ public class CourseInfoController {
         ResponseDto responseDto = new ResponseDto();
         List<CourseInfoDto> courseDtoList = courseInfoService.listNew(pageDto);
         responseDto.setContent(courseDtoList);
+        return responseDto;
+    }
+
+    /**
+     * 列表查询
+     */
+    @PostMapping("/list")
+    public ResponseDto list(@RequestBody PageDto pageDto) {
+        ResponseDto responseDto = new ResponseDto();
+        courseInfoService.list(pageDto);
+        responseDto.setContent(pageDto);
         return responseDto;
     }
 }
