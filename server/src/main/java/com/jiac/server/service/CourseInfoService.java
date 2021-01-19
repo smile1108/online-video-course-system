@@ -48,22 +48,9 @@ public class CourseInfoService {
 
     public void list(CoursePageDto pageDto){
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        CourseInfoExample courseInfoExample = new CourseInfoExample();
-        CourseInfoExample.Criteria criteria = courseInfoExample.createCriteria();
-        if(!StringUtils.isEmpty(pageDto.getStatus())) {
-            criteria.andStatusEqualTo(pageDto.getStatus());
-        }
-        courseInfoExample.setOrderByClause("sort asc");
-        List<CourseInfo> courseInfoList = courseInfoMapper.selectByExample(courseInfoExample);
-        PageInfo<CourseInfo> pageInfo = new PageInfo<>(courseInfoList);
+        List<CourseInfoDto> courseInfoDtoList = myCourseMapper.list(pageDto);
+        PageInfo<CourseInfoDto> pageInfo = new PageInfo<>(courseInfoDtoList);
         pageDto.setTotal(pageInfo.getTotal());
-        List<CourseInfoDto> courseInfoDtoList = new ArrayList<>();
-        for(int i = 0, l = courseInfoList.size(); i < l; i++){
-            CourseInfo courseInfo = courseInfoList.get(i);
-            CourseInfoDto courseInfoDto = new CourseInfoDto();
-            BeanUtils.copyProperties(courseInfo, courseInfoDto);
-            courseInfoDtoList.add(courseInfoDto);
-        }
         pageDto.setList(courseInfoDtoList);
     }
 
